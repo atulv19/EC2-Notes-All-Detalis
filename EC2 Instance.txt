@@ -6,7 +6,7 @@
 
 1 create key pair ------>  A key pair in EC2 is a set of public and private cryptographic keys used to securely connect to                                            EC2 instances.
 2 create security group  ----> A security group in EC2 is a virtual firewall that controls inbound and outbound traffic to                                             your EC2 instances.
-                  (1)   RDP (Remote Desktop Protocol) is a protocol that allows you to remotely connect to a Windows EC2                                  instance with a graphical user interface.
+                  (1)   RDP (Remote Desktop Protocol) is a protocol that allows you to remotely connect to a Windows EC2 instance with a graphical user interface.
                    
 3 Lonch Instance  ---> 
     (1) Instance Name 
@@ -78,7 +78,7 @@ Amazon EBS एक ब्लॉक स्टोरेज सर्विस ह�
 (5) volume create --->  (7 type of storage)
                IOPS  --->  Input/Output Operations Per Second।
               Throughput (MiB/s) -->How fast data can be transferred from one place to another, measured in Megabytes                                                             per second (MiB/s). 
-                                                                      कितनी तेजी से डेटा एक जगह से दूसरी जगह ट्रांसफर हो सकता है (मेगाबाइट्स प्रति सेकंड में)। 
+             कितनी तेजी से डेटा एक जगह से दूसरी जगह ट्रांसफर हो सकता है (मेगाबाइट्स प्रति सेकंड में)। 
                Tags  --> AWS में Tags छोटे-छोटे key-value pairs होते हैं जिन्हें आप AWS resources (जैसे EC2, S3, EBS volumes आदि) पर लगाते हैं   ताकि   उन्हें organize, identify और manage करना आसान हो जाए।
 
 (6) Root Volume ---->  वह मुख्य EBS Volume होता है जिस पर आपका EC2 instance का Operating System (जैसे Linux, Windows)  इंस्टॉल होता है।
@@ -265,4 +265,4 @@ Auto Scaling एक AWS service है जो automatically EC2 instances को
 1 अगर हम Auto Scaling Group के instance को manually Terminate कर देते हैं, तो  Auto Scaling automatically नया instance launch कर देता है?
  2   Auto Scaling Group के instance को manually stop kre to instance nhi lonch hoga
 
------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------
