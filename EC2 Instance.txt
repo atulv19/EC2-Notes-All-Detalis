@@ -1,0 +1,268 @@
+                                                                                EC2 Instance 
+-----------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+ ------To connect to a Windows EC2 instance using RDP (Remote Desktop Connection), follow these steps:-----------------
+
+1 create key pair ------>  A key pair in EC2 is a set of public and private cryptographic keys used to securely connect to                                            EC2 instances.
+2 create security group  ----> A security group in EC2 is a virtual firewall that controls inbound and outbound traffic to                                             your EC2 instances.
+                  (1)   RDP (Remote Desktop Protocol) is a protocol that allows you to remotely connect to a Windows EC2                                  instance with a graphical user interface.
+                   
+3 Lonch Instance  ---> 
+    (1) Instance Name 
+    (2) Select AMI
+    (3) Instance Type --->An instance type in EC2 defines the hardware configuration for your instance, including:
+                 vCPU (virtual CPUs)
+                 Memory (RAM)
+                 Storage type
+                 Network performance
+    (4) Key Pair
+    (5) Lonch 
+
+(4) Go to instance and conncet and select RDP client
+(5) Get the UserName & Password 
+(6) Get Password
+(7) Upload private key --> upload downlod key pair file
+(8) Go your Windo and Search RDP and Conncet EC2 in local system
+
+
+
+
+---------------------------------------------------------------Linux Server --------------------------------------------------------------
+
+(1) Lonch Instance ---> 
+    (1) Instance Name 
+    (2) Select AMI ---->  Linux
+    (3) Instance Type --->An instance type in EC2 defines the hardware configuration for your instance, including:
+                 vCPU (virtual CPUs)
+                 Memory (RAM)
+                 Storage type
+                 Network performance
+    (4) Key Pair
+    (5) Lonch 
+(2) Go to instance and select security tab and add edit enbound rul 
+(3)Go to instance and select SSH Client
+(4)Go to where downlod KeyPair and open GitBash Command and connet
+
+------------------------------------------------------------------------------------------------------------------------------------------------------- 
+               
+ An IP address in AWS is a numerical label assigned to an AWS resource (like an EC2 instance) to enable network communication. It can be:
+
+Public IP – accessible over the internet.
+Private IP – used within a VPC for internal communication.
+Elastic IP – a static public IP address associated with your AWS account.
+
+-------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+-------------------------------------------------- Amazon Elastic Block Store------------------------------------------------------------------
+
+Amazon EBS एक ब्लॉक स्टोरेज सर्विस है, जिसे आप EC2 instance के साथ attach कर सकते हैं जैसे कि हार्ड डिस्क।
+
+(1) Volume  -->  "एक virtual hard disk" जो आप अपने EC2 instance (virtual server) में attach करते हैं।
+(2) Snapshot -->         Snapshot = किसी Volume का Backup        <--------
+                    जब आप EBS Volume का Snapshot लेते हैं, तो:
+                    वो Volume के पूरे डेटा का Point-in-Time Backup लेता है
+                Snapshot को आप बाद में एक नया Volume बनाने में इस्तेमाल कर सकते हैं
+(3) Lifecycle Manager  ----> 
+                           EBS Lifecycle Manager आपको ऑटोमेटिक तरीके से:
+                           EBS Volumes के Snapshots को:
+                           Automatically Create (बनाना)
+                           Automatically Delete (पुराने Delete करना) में मदद करता है।
+                                  यानि कि अब आपको रोज़ CLI से snapshot बनाने की जरूरत नहीं – AWS यह काम schedule पर खुद करेगा ✅
+
+(4) Additional Volume   --->  EC2 instance में extra EBS storage जोड़ना।
+
+
+(5) volume create --->  (7 type of storage)
+               IOPS  --->  Input/Output Operations Per Second।
+              Throughput (MiB/s) -->How fast data can be transferred from one place to another, measured in Megabytes                                                             per second (MiB/s). 
+                                                                      कितनी तेजी से डेटा एक जगह से दूसरी जगह ट्रांसफर हो सकता है (मेगाबाइट्स प्रति सेकंड में)। 
+               Tags  --> AWS में Tags छोटे-छोटे key-value pairs होते हैं जिन्हें आप AWS resources (जैसे EC2, S3, EBS volumes आदि) पर लगाते हैं   ताकि   उन्हें organize, identify और manage करना आसान हो जाए।
+
+(6) Root Volume ---->  वह मुख्य EBS Volume होता है जिस पर आपका EC2 instance का Operating System (जैसे Linux, Windows)  इंस्टॉल होता है।
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+                  -----------   ----------------------create volume and attech my system---------------------------------------------------------
+
+1 Create EC2 Instance ---> Instance Name  ---> AMI Linux ----> keyPair  ----> security group ---->Lonch 
+
+2 Volums --> Availability Zone (ap-south-1b) --> Create Volume 
+    goto Volume Check the check box --> action --> attach volume -->Availability Zone-->Instance -->Device name(/dev/sdb)--->attach 
+
+ after attech go to instance 
+
+Instance(check box) ---> Storage ---->Conncet server by SSH ---> goto gitbash command connect -->
+ command run
+
+      lsblk   command (check volume attech) 
+      cd / --> root folder
+      ls -l  --->  एक Linux कमांड है जो directory की फाइलों को detailed format में list करता है
+      ls -l dev  --> inside dev
+      sudo mkfs -t ext4 /dev/xvdb   ---> This command formats the block device /dev/xvdb with the EXT4 file system.
+ 
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+-----------------------------------------Snapshot (AWS EBS Snapshot)----------------------------------------------------------
+
+An EBS Snapshot is a backup of your EBS volume stored in Amazon S3.
+EBS Snapshot एक ऐसा backup copy होता है जो आपके EBS Volume के पूरे data को secure और durable तरीके से सेव कर देता है।
+
+ Use Cases:
+ 
+Data backupS
+Disaster recovery
+Create a copy of production data
+Launch a new volume from a snapshot
+
+Snapshot का Storage:
+
+Snapshot को Amazon S3 में internally store किया जाता है (आपको S3 bucket नहीं दिखेगा)।
+Incremental होता है — अगली बार सिर्फ changes store होते हैं।
+
+-------------------------------------------------------------------------------------------------------------------------------------------------------
+
+-------------------------------------Create & Work in Snapshot copy Other Resions -----------------------------------------------
+
+(1) Create Instance --> AMI Linux ---> Keypair  ----> security group ---> lonch
+(2) Volums create --> Availability Zone (ap-south-1b) --> Create Volume 
+       goto Volume Check the check box --> action --> attach volume -->Availability Zone-->Instance -->Device name(/dev/sdb)--->attach
+(3) Snapshot --> Source (volume) --> select volume --> Create Snapshot 
+     than go to --> action ---> copy Snapshot ----> Destination Region(us-east-1)  --> copy Snapshot 
+     than go to  -->  us-east-1 --> check the Snapshot  check --> action ---> create volume 
+
+
+
+1 DIFFREANCE BETWEEN Snapshot  AND EBS
+ANS --  EBS -->EBS volume is restricted to one Availability Zone (AZ)
+              Snapshot  -- Snapshot is stored in Amazon S3, and is available across all Availability Zones and Regions
+                                         (with copy)
+
+2 Why Do We Create Snapshot in AWS 
+ans    Quick Data Migration
+  
+ 1. Backup & Recovery --->  Snapshot आपके EBS Volume का backup होता है।
+         अगर कोई data गलती से delete हो जाए या server corrupt हो जाए, तो आप snapshot से restore कर सकते हैं।
+
+2. Disaster Recovery -->   EC2 instance या Availability Zone failure की स्थिति में आप snapshot से नया volume बना सकते हैं।
+ 
+3. Cloning / Duplication --> Snapshot से नया EBS Volume बना सकते हैं → इससे आप data को दूसरे servers पर replicate कर सकते हैं।  
+
+4.Region Migration --> Snapshot को दूसरे Region में copy करके आप उसी data से किसी और region में infrastructure set कर सकते हैं।
+
+5. Automation with Lifecycle Policy ---> Automatically snapshots create और delete करना आसान है — जिससे manual backup                                                                                                 का झंझट नहीं रहता। 
+
+-------------------------------------------------------------------------------------------------------------------------------------------------------
+
+-------------------------------- --------------Load Balancers (39:42)-------------------------------------------------------------------------
+
+A Load Balancer is a service that automatically distributes incoming network or application traffic across multiple targets (like EC2 instances, containers, or IP addresses) to ensure high availability, scalability, and fault tolerance.
+
+Types of AWS Load Balancers:
+
+1. Application LB (ALB)	For HTTP/HTTPS, intelligent routing (Layer 7)
+2. Network LB (NLB)	                   For TCP/UDP, high performance (Layer 4)
+3 Gateway LB	                   For third-party appliances like firewalls
+4 Classic LB (old)	                   Combines L4 + L7, mostly legacy use
+
+
+ Load Balancer with EC2 Architecture:
+
+                                               Internet
+                                                     |
+                                         [Load Balancer]
+                                               /       \
+                                     [EC2-1]        [EC2-2]
+
+
+---> Round Robin Technique in Load Balancer--> 
+ Round Robin एक load balancing technique है जिसमें incoming traffic को sequentially (क्रम से) हर server (EC2 instance) को दिया जाता है — एक-एक करके बारी-बारी से।
+
+
+What is Auto Scaling in AWS
+Auto Scaling एक AWS service है जो automatically EC2 instances को launch या terminate करती है — आपकी application की load/demand के हिसाब से।
+-------------------------------------------------------------------------------------------------------------------------------------------------------
+-------------------------------------------------LOAD BLANCING CONCEPT------------------------------------------------------
+
+
+(1) Create Instance --> AMI Linux ---> Keypair  ----> security group ---> Advanced details--->User data - optional(add basic code ) ---->   lonch
+
+#!/bin/bash
+yum update -y
+yum install httpd -y
+systemctl start httpd
+systemctl enable httpd
+echo "Welcome to My EC2 Instance!" > /var/www/html/index.html
+
+goto ipv4 and copy ip adress and past browser
+
+2 Create Target Group ---> instance -->target group name =--->  ipv4 ---> next --> add instance --> create target group
+3 Load Blancer --> create ---> application LB ---> Load balancer name --->
+    -->  Network mapping (Availability Zones and subnets) All 3 -->  Listeners and routing(Default action) --> Create LB
+
+sem process add multipal instance and manaezing concept of load blacing 
+ 
+       
+-----------------------------------------------------------------------------------------------------------------------------------------------------
+
+--------------------------------------------Monolithic Application(54:44)-------------------------------------------------------------
+
+ A Monolithic Application is a single, unified software where all components (UI, business logic, database access) are tightly combined and run as one program
+
+Structure:
+                   Monolithic App
+                                  ├── UI Layer
+                                  ├── Business Logic Layer
+                                  └── Data Access Layer
+                                        (All in one big WAR/JAR file)
+
+------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+---------------------------LOAD BLANCING CONCEPT with Microservices(54:44)---------------------------------------------------
+
+(1) Create Instance--> flight_1 --> AMI Linux ---> Keypair  ----> security group ---> Advanced details--->User data - optional(add basic code ) ---->   lonch
+
+(1) Create Instance--> flight_2  --> AMI Linux ---> Keypair  ----> security group ---> Advanced details--->User data - optional(add basic code ) ---->   lonch
+
+(1) Create Instance--> hotel_1 --> AMI Linux ---> Keypair  ----> security group ---> Advanced details--->User data - optional(add basic code ) ---->   lonch
+
+(1) Create Instance--> hotel_2 --> AMI Linux ---> Keypair  ----> security group ---> Advanced details--->User data - optional(add basic code ) ---->   lonch
+
+#!/bin/bash
+yum update -y
+yum install httpd -y
+systemctl start httpd
+systemctl enable httpd
+echo "Welcome to My EC2 Instance!" > /var/www/html/index.html
+
+
+2 Create Target Group ---> instance -->target group name(flight_1) =--->  ipv4 ---> next --> add instance --> create target group
+
+ Create Target Group -- flight_2 --> hotal_1--> hotal_2
+ 
+3 Load Blancer --> create ---> application LB ---> Load balancer name --->
+    -->  Network mapping (Availability Zones and subnets) All 3 -->  Listeners and routing(Default action) --> Create LB
+
+sem process add multipal instance and manaezing concept of load blacing 
+
+------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+--------------------------------------------------------------Auto Scaling(32:16)-------------------------------------------------------
+
+Auto Scaling एक AWS service है जो automatically EC2 instances को launch या terminate करती है — आपकी application की load/demand के हिसाब से।
+
+ 1  Auto Scaling --> name --> create template --> AMI(Linux) --> Instance type ---> Key pair  ---> Network settings ---> create template 
+ 2  Auto Scaling --> Auto Scaling group name --> Launch template --> next --> Availability Zones and subnets(all 3) ---> next -- > next  ---> Scaling (Min desired capacity  1)
+   (Max desired capacity 3)  --> next  ---> next  ---> create Auto Scaling
+
+
+1 अगर हम Auto Scaling Group के instance को manually Terminate कर देते हैं, तो  Auto Scaling automatically नया instance launch कर देता है?
+ 2   Auto Scaling Group के instance को manually stop kre to instance nhi lonch hoga
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
